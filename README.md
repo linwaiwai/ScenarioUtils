@@ -1,6 +1,6 @@
 # ScenarioUtils
 
-ScenarioUtils 是为spring boot bean对象做输出过滤编写的一个简单工具集。
+ScenarioUtils 是为spring boot bean对象做输出过滤编写的一个简单工具集。该工具支持让你编写的服务不再需要根据不同需求编写新的Bean。少编写点些胶水代码身心才健康。
 
 使用方法：
 ```Java
