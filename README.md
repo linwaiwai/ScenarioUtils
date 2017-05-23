@@ -68,7 +68,7 @@ class ProjectController {
   }
   
   @RequestMapping(value = "/detail", method = RequestMethod.GET)
-	public @ResponseBody RestResponse<Project> list(){
+	public @ResponseBody RestResponse<Project> detail(){
     Project project = new Project();
     project.id = 1;
     project.name = "hello";
