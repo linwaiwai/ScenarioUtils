@@ -26,44 +26,40 @@ import com.moe.wadmin.util.ScenarioUtilsBean;
 @Configuration
 public class WebMvcConfig extends WebMvcConfigurerAdapter {
 
-	 @Bean
-	 public MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter () {
-	     return new MappingJackson2HttpMessageConverter () {
-	    	 protected void writeInternal(Object object, Type type, HttpOutputMessage outputMessage)
-    				throws IOException, HttpMessageNotWritableException {
-	    		 if (object instanceof RestResponse){
-	    			 RestResponse<?> response  = (RestResponse<?>)object ;
-	    			 try {
-	    				 ScenarioUtilsBean.setInstance(new ScenarioUtilsBean());
-	    				 if (response.getData() instanceof List){
-	    					 List<Map<String, Object>> result;
-	    					 result = ( (ScenarioUtilsBean) ScenarioUtilsBean.getInstance()).describes((List)response.getData());
-	    					 super.writeInternal(new RestResponse(result,response.getCode(),response.getMessage()), type, outputMessage);
-	    				 } else {
-	    					 Map<String, Object> map = null;
-	    					 map =(Map<String, Object>) ( (ScenarioUtilsBean) ScenarioUtilsBean.getInstance()).describes(response.getData());	
-	    					 super.writeInternal(new RestResponse<Map<String, Object>>(map,response.getCode(),response.getMessage()), type, outputMessage);
-	    				 }
-	    			 } catch (IllegalAccessException e) {
-	    				 e.printStackTrace();
-	    				 super.writeInternal(object, type, outputMessage);
-	    			 } catch (InvocationTargetException e) {
-	    				 e.printStackTrace();
-	    				 super.writeInternal(object, type, outputMessage);
-	    			 } catch (NoSuchMethodException e) {
-	    				 e.printStackTrace();
-	    				 super.writeInternal(object, type, outputMessage);
-	    			 }
-	    		 } else {
-	    			 super.writeInternal(object, type, outputMessage);
-	    		 }
-	         }
-	     };
-	 }
+	@Bean
+	public MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter() {
+		return new MappingJackson2HttpMessageConverter() {
+			protected void writeInternal(Object object, Type type, HttpOutputMessage outputMessage)
+					throws IOException, HttpMessageNotWritableException {
+				if (object instanceof RestResponse) {
+					RestResponse<?> response = (RestResponse<?>) object;
+					try {
+						ScenarioUtilsBean.setInstance(new ScenarioUtilsBean());
+						Object result = null;
+						result = ((ScenarioUtilsBean) ScenarioUtilsBean.getInstance()).describes(response.getData());
+						super.writeInternal(new RestResponse<Object>(result, response.getCode(), response.getMessage()),
+								type, outputMessage);
+					} catch (IllegalAccessException e) {
+						e.printStackTrace();
+						super.writeInternal(object, type, outputMessage);
+					} catch (InvocationTargetException e) {
+						e.printStackTrace();
+						super.writeInternal(object, type, outputMessage);
+					} catch (NoSuchMethodException e) {
+						e.printStackTrace();
+						super.writeInternal(object, type, outputMessage);
+					}
+				} else {
+					super.writeInternal(object, type, outputMessage);
+				}
+			}
+		};
+	}
+
 	// 添加自定义转换器
-	 @Override
-	 public void configureMessageConverters (List<HttpMessageConverter<?>> converters) {
-	     converters.add (mappingJackson2HttpMessageConverter ());
-	     super.configureMessageConverters (converters);
-	 }
+	@Override
+	public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+		converters.add(mappingJackson2HttpMessageConverter());
+		super.configureMessageConverters(converters);
+	}
 }
