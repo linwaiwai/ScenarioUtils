@@ -70,16 +70,8 @@ public class ScenarioUtilsBean extends BeanUtilsBean {
 				result.put(key, object);
 			}
 			return (Map<String, Object>) result;
-		} else if (bean instanceof Page) {
+		} else if (bean instanceof Page || bean instanceof List) {
 			return this.describes((List<?>) bean);
-		} else if (bean instanceof List) {
-			List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
-			for (Object single : (List<?>) bean) {
-				@SuppressWarnings("unchecked")
-				Map<String, Object> object = (Map<String, Object>) this.describes(single);
-				result.add(object);
-			}
-			return result;
 		} else {
 			fields = ScenarioModel.getBeanAttributes(bean);
 		}
