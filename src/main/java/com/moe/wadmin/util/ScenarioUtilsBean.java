@@ -25,14 +25,32 @@ public class ScenarioUtilsBean extends BeanUtilsBean {
 		;
 	}
 
-	public List<Map<String, Object>> describes(List<?> beans)
-			throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
-		List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
+	public List<?> describes(List<?>beans) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException{
+		List<Object> result = new ArrayList<Object>();
 		for (Object bean : beans) {
-			Map<String, Object> object = (Map<String, Object>) this.describes(bean);
-			result.add(object);
+			Class<?> clazz = bean.getClass();
+			if (bean == null || clazz.equals(String.class) ||   
+	    	         clazz.equals(Integer.class)||   
+	    	         clazz.equals(Byte.class) ||   
+	    	         clazz.equals(Long.class) ||   
+	    	         clazz.equals(Double.class) ||   
+	    	         clazz.equals(Float.class) ||   
+	    	         clazz.equals(Character.class) ||   
+	    	         clazz.equals(Short.class) ||   
+	    	         clazz.equals(BigDecimal.class) ||   
+	    	         clazz.equals(BigInteger.class) ||   
+	    	         clazz.equals(Boolean.class) ||   
+	    	         clazz.equals(Date.class) ||   
+//	    	         clazz.equals(DateTime.class) ||
+	    	         clazz.isPrimitive() ){
+				result.add(bean);	
+			} else {
+				@SuppressWarnings("unchecked")
+				Map<String, Object>object =  (Map<String, Object>) this.describes(bean);
+				result.add(object);
+			}
 		}
-		return result;
+		return result;	
 	}
 
 	public Object describes(Object bean)
